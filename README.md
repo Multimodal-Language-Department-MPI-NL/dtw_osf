@@ -1,4 +1,4 @@
-# alidating dynamic time warping as a measure of gesture form similarity
+# Validating dynamic time warping as a measure of gesture form similarity
 
 This repository contains Python/R scripts and processed anonymized data for the article "Validating dynamic time warping as a measure of gesture form similarity".
 
