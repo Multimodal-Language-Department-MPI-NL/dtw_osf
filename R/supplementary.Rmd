@@ -1,7 +1,7 @@
 ---
 title: "Supplementary analysis"
 date: "Last updated: `r Sys.Date()`"
-output: 
+output:
   html_document:
     theme: cosmo
     toc: true
@@ -13,6 +13,7 @@ output:
     code-tools: true
     code-fold: true
     code_folding: hide #hide the code section initially
+  github_document:
 editor_options: 
   markdown: 
     wrap: sentence #Wrap texts in code cells
@@ -42,7 +43,7 @@ options(dplyr.summarise.inform = FALSE)
 options(render = 'normal_print')
 
 ### Rmd settings
-knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, fig.path="figures_md/")
 ```
 
 # 1. Relation between correlation and regression
@@ -60,7 +61,7 @@ Let's run some simulations to understand the effect of beta and variance on corr
 - `effect_size_s` (beta) = -0.046
 - `sd_l` (sigma) = 0.122
 
-```{r}
+```{r corr_sim}
 set.seed(123)
 
 ### simulate dataframe with small effect size & large deviation (Study 2 without mirroring)
@@ -234,7 +235,7 @@ df_dtw_zoom_long_res = df_dtw_zoom %>%
 
 ## Data visualization
 ### correlation for each feature
-```{r}
+```{r scp_feature_supp1}
 scp_feature = df_dtw_zoom_long %>%
   ggplot(aes(x = similarity, y = average_distance)) +
   geom_point(size = 0.8, alpha = 0.7) +
@@ -265,7 +266,7 @@ scp_feature = df_dtw_zoom_long %>%
 <br>
 
 ### partial residual plot
-```{r}
+```{r scp_feature_res_supp1}
 scp_feature_res = df_dtw_zoom_long_res %>%
   ggplot(aes(x = similarity_res, y = average_distance)) +
   geom_point(size = 0.8, alpha = 0.7) +
@@ -293,7 +294,7 @@ scp_feature_res
 <br>
 
 ### correlation for total similarity score
-```{r}
+```{r scp_total_supp1}
 scp_total = df_dtw_zoom %>%
   ggplot(aes(x = total_similarity, y = average_distance)) +
   geom_point(size = 1, alpha = 0.7) +
@@ -324,7 +325,7 @@ scp_total = df_dtw_zoom %>%
 # ggsave("figures/distance_zoom_total.svg", width=6, height=6, dpi=600)
 ```
 
-```{r}
+```{r distance_zoom_combined_supp1}
 scp_total = scp_total + 
   labs(tag = "A") +
   theme(plot.tag.position = c(0,1),
@@ -346,7 +347,7 @@ ggsave("figures/distance_zoom_combined.svg", width=10, height=5, dpi=600)
 <br>
 
 ### [z] correlation for each feature
-```{r}
+```{r scp_feature_z}
 scp_feature_z = df_dtw_zoom_long %>%
   ggplot(aes(x = similarity_z, y = average_distance)) +
   geom_point(size = 0.8, alpha = 0.7) +
@@ -376,7 +377,7 @@ scp_feature_z = df_dtw_zoom_long %>%
 <br>
 
 ### [z] correlation for total similarity score
-```{r}
+```{r scp_total_z}
 scp_total_z = df_dtw_zoom %>%
   ggplot(aes(x = total_similarity_z, y = average_distance)) +
   geom_point(size = 1, alpha = 0.7) +
@@ -407,7 +408,7 @@ scp_total_z = df_dtw_zoom %>%
 # ggsave("figures/distance_zoom_total_z.svg", width=6, height=6, dpi=600)
 ```
 
-```{r}
+```{r distance_zoom_combined_z}
 scp_total_z = scp_total_z + 
   labs(tag = "A") +
   theme(plot.tag.position = c(0,1),
@@ -431,7 +432,7 @@ ggsave("figures/distance_zoom_combined_z.svg", width=10, height=5, dpi=600)
 ## Statistical analysis
 ### Check the normality assumption of errors
 Linear mixed-effects models assume that the residuals are normally distributed. Let's check this assumption by plotting the residuals of the models. For this, we will use the `check_model()` function from the `performance` package.
-```{r, fig.height=10}
+```{r check_assumptions_supp1, fig.height=10}
 model = lmer(average_distance ~ 1 + (1|pair) + (1|target), 
              data = subset(df_dtw_zoom))
 check_model(model)
@@ -468,7 +469,7 @@ lmer_zoom_total = lmer(average_distance ~
 summ(lmer_zoom_total, digits = 3)
 ```
 
-```{r, fig.height=10, fig.width=10}
+```{r model_diag_supp1, fig.height=10, fig.width=10}
 check_model(lmer_zoom_total)
 ```
 
@@ -625,7 +626,7 @@ df_dtw_zoom_v2_long_res = df_dtw_zoom_v2 %>%
 
 ## Data visualization
 ### correlation for each feature
-```{r}
+```{r scp_feature_supp2}
 scp_feature = df_dtw_zoom_v2_long %>%
   ggplot(aes(x = similarity, y = average_distance)) +
   geom_point(size = 0.8, alpha = 0.7) +
@@ -655,7 +656,7 @@ scp_feature = df_dtw_zoom_v2_long %>%
 <br>
 
 ### partial residual plot
-```{r}
+```{r scp_feature_res_supp2}
 scp_feature_res = df_dtw_zoom_v2_long_res %>%
   ggplot(aes(x = similarity_res, y = average_distance)) +
   geom_point(size = 0.8, alpha = 0.7) +
@@ -683,7 +684,7 @@ scp_feature_res
 <br>
 
 ### correlation for total similarity score
-```{r}
+```{r scp_total_supp2}
 scp_total = df_dtw_zoom_v2 %>%
   ggplot(aes(x = total_similarity, y = average_distance)) +
   geom_point(size = 1, alpha = 0.7) +
@@ -716,7 +717,7 @@ scp_total = df_dtw_zoom_v2 %>%
 # ggsave("figures/distance_zoom_v2_total.svg", width=8, height=6, dpi=600)
 ```
 
-```{r}
+```{r distance_zoom_v2_combined}
 scp_total = scp_total + 
   labs(tag = "A") +
   theme(plot.tag.position = c(0,1),
@@ -738,7 +739,7 @@ ggsave("figures/distance_zoom_v2_combined.svg", width=10, height=5, dpi=600)
 <br>
 
 ### [z] correlation for each feature
-```{r}
+```{r scp_feature_z_supp2}
 scp_feature_z = df_dtw_zoom_v2_long %>%
   ggplot(aes(x = similarity_z, y = average_distance)) +
   geom_point(size = 0.8, alpha = 0.7) +
@@ -768,7 +769,7 @@ scp_feature_z = df_dtw_zoom_v2_long %>%
 <br>
 
 ### [z] correlation for total similarity score
-```{r}
+```{r scp_total_z_supp2}
 scp_total_z = df_dtw_zoom_v2 %>%
   ggplot(aes(x = total_similarity_z, y = average_distance)) +
   geom_point(size = 1, alpha = 0.7) +
@@ -800,7 +801,7 @@ scp_total_z = df_dtw_zoom_v2 %>%
 ```
 
 
-```{r}
+```{r distance_zoom_v2_combined_z}
 scp_total_z = scp_total_z + 
   labs(tag = "A") +
   theme(plot.tag.position = c(0,1),
@@ -824,7 +825,7 @@ ggsave("figures/distance_zoom_v2_combined_z.svg", width=10, height=5, dpi=600)
 ## Statistical analysis
 ### Check the normality assumption of errors
 Linear mixed-effects models assume that the residuals are normally distributed. Let's check this assumption by plotting the residuals of the models. For this, we will use the `check_model()` function from the `performance` package.
-```{r, fig.height=10}
+```{r check_assumptions_supp2, fig.height=10}
 model = lmer(average_distance ~ 1 + (1|pair), 
              data = subset(df_dtw_zoom_v2))
 check_model(model)
@@ -861,7 +862,7 @@ lmer_zoom_total = lmer(average_distance ~
 summ(lmer_zoom_total, digits = 3)
 ```
 
-```{r, fig.height=10, fig.width=10}
+```{r model_diag_supp2, fig.height=10, fig.width=10}
 check_model(lmer_zoom_total)
 ```
 

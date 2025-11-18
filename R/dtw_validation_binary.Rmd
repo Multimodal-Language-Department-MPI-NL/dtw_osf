@@ -13,6 +13,7 @@ output:
     code-tools: true
     code-fold: true
     code_folding: hide #hide the code section initially
+  github_document:
 editor_options:
   markdown:
     wrap: sentence
@@ -42,7 +43,7 @@ options(dplyr.summarise.inform = FALSE)
 options(render = 'normal_print')
 
 ### Rmd settings
-knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, fig.path="figures_md/")
 ```
 
 # Data preparation
@@ -185,7 +186,7 @@ mean_distance_f2f_smop
 
 ## Data Visualization
 ### by SMOP features
-```{r}
+```{r }is_f2f_feature}
 dis_f2f_feature = df_dtw_f2f_long %>%
   ggplot(aes(x = feature, y = average_distance, 
              fill = similarity, color = similarity)) +
@@ -226,7 +227,7 @@ dis_f2f_feature = df_dtw_f2f_long %>%
 <br>
 
 ### by the number of similar features
-```{r, message=T, warning=T}
+```{r dis_f2f_n_features, message=T, warning=T}
 dis_f2f_n_features = df_dtw_f2f %>%
   ggplot(aes(x = n_features_smop, y = average_distance, 
              group = n_features_smop)) +
@@ -264,7 +265,7 @@ dis_f2f_n_features
 # ggsave("figures/distance_f2f_n_features.svg", width=6, height=4, dpi=600)
 ```
 
-```{r}
+```{r distance_f2f_combined}
 dis_f2f_n_features = dis_f2f_n_features + 
   labs(tag = "A") +
   theme(plot.tag.position = c(0,1),
@@ -300,7 +301,7 @@ contrasts(df_dtw_f2f$handshape)
 
 ### Check the normality assumption of errors
 Linear mixed-effects models assume that the residuals are normally distributed. Let's check this assumption by plotting the residuals of the models. For this, we will use the `check_model()` function from the `performance` package.
-```{r, fig.height=10}
+```{r check_assumptions_f2f, fig.height=10}
 model = lmer(average_distance ~ 1 + (1|pair) + (1|target), 
              data = subset(df_dtw_f2f))
 check_model(model)
@@ -399,7 +400,7 @@ In this analysis, we found that the normalized DTW distance is significantly low
 # ===Zoom dataset===
 ## Data visualization
 ### by SMOP features
-```{r}
+```{r dis_zoom_feature}
 dis_zoom_feature = df_dtw_zoom_long %>%
   ggplot(aes(x = feature, y = average_distance, 
              fill = similarity_bin, color = similarity_bin)) +
@@ -442,7 +443,7 @@ dis_zoom_feature = df_dtw_zoom_long %>%
 <br>
 
 ### by the number of similar features
-```{r, message=FALSE, warning=FALSE}
+```{r dis_zoom_n_features, message=FALSE, warning=FALSE}
 dis_zoom_n_features = df_dtw_zoom %>%
   ggplot(aes(x = n_features, y = average_distance, 
              group = n_features)) +
@@ -479,7 +480,7 @@ dis_zoom_n_features = df_dtw_zoom %>%
 # ggsave("figures/distance_zoom_n_features.svg", width=6, height=4, dpi=600)
 ```
 
-```{r}
+```{r distance_zoom_combined_bin}
 dis_zoom_n_features = dis_zoom_n_features + 
   labs(tag = "A") +
   theme(plot.tag.position = c(0,1),
@@ -515,7 +516,7 @@ contrasts(df_dtw_zoom$handshape_bin)
 
 ### Check the normality assumption of errors
 Linear mixed-effects models assume that the residuals are normally distributed. Let's check this assumption by plotting the residuals of the models. For this, we will use the `check_model()` function from the `performance` package.
-```{r, fig.height=10}
+```{r check_assumptions_zoom1, fig.height=10}
 model = lmer(average_distance ~ 1 + (1|pair) + (1|target), 
              data = subset(df_dtw_zoom))
 check_model(model)
@@ -553,7 +554,7 @@ lmer_zoom_n_features = lmer(average_distance ~
 summ(lmer_zoom_n_features, digits = 4)
 ```
 
-```{r, fig.height=10, fig.width=10}
+```{r model_diag_distance_zoom1, fig.height=10, fig.width=10}
 check_model(lmer_zoom_n_features)
 ```
 
@@ -717,7 +718,7 @@ dis_zoom_v2_feature = df_dtw_zoom_v2_long %>%
 ```
 
 ```{r, include = FALSE}
-# ggsave(file="figures/distance_zoom_v2_feature.svg", width=8, height=6, dpi=600)
+# ggsave("figures/distance_zoom_v2_feature.svg", width=8, height=6, dpi=600)
 ```
 
 <br>
@@ -760,7 +761,7 @@ dis_zoom_v2_n_features = df_dtw_zoom_v2 %>%
 # ggsave("figures/distance_zoom_v2_n_features.svg", width=6, height=4, dpi=600)
 ```
 
-```{r}
+```{r distance_zoom_v2_combined_bin}
 dis_zoom_v2_n_features = dis_zoom_v2_n_features + 
   labs(tag = "A") +
   theme(plot.tag.position = c(0,1),
@@ -796,7 +797,7 @@ contrasts(df_dtw_zoom_v2$handshape_bin)
 
 ### Check the normality assumption of errors
 Linear mixed-effects models assume that the residuals are normally distributed. Let's check this assumption by plotting the residuals of the models. For this, we will use the `check_model()` function from the `performance` package.
-```{r, fig.height=10}
+```{r check_assumptions_zoom2, fig.height=10}
 model = lmer(average_distance ~ 1 + (1|pair), 
              data = subset(df_dtw_zoom_v2))
 check_model(model)
@@ -834,7 +835,7 @@ lmer_zoom_n_features = lmer(average_distance ~
 summ(lmer_zoom_n_features, digits = 3)
 ```
 
-```{r, fig.height=10, fig.width=10}
+```{r model_diag_distance_zoom2, fig.height=10, fig.width=10}
 check_model(lmer_zoom_n_features)
 ```
 
